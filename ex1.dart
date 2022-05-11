@@ -78,9 +78,28 @@ class _Ex1State extends State<Ex1> {
   ];
 
   void setTextInput(text, type) {
+    if (inputText.length > 30) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Warning!!"),
+            content: const Text("Khong nhap qua 30 so!"),
+            actions: <Widget>[
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
     switch (type) {
       case 'clear':
-      
         setState(() {
           inputText = '';
           lastResult = 0;
@@ -98,27 +117,24 @@ class _Ex1State extends State<Ex1> {
         if (currentCalculation.isNotEmpty) {
           switch (currentCalculation) {
             case '+':
-              result = 3 + 5;
+              result = result + int.parse(text);
               break;
             case '-':
-              result -= int.parse(newInput);
+              result = result - int.parse(text);
               break;
             case '*':
-              result *= int.parse(newInput);
+              result = result * int.parse(text);
               break;
             case '/':
-              result = result ~/ int.parse(newInput);
+              result = result ~/ int.parse(text);
               break;
           }
         }
-        log('data: $result');
-
         setState(() {
           inputText = newInput;
           lastResult = result;
           currentCalculation = '';
         });
-        log('data: $newInput');
         break;
 
       case 'calculation':
@@ -135,10 +151,7 @@ class _Ex1State extends State<Ex1> {
     }
   }
 
-  void equalPressed() {
-    String finalInput = inputText;
-    finalInput = inputText.replaceAll('x', '*');
-  }
+  void equalPressed() {}
 
   @override
   Widget build(BuildContext context) {
@@ -156,14 +169,14 @@ class _Ex1State extends State<Ex1> {
                 width: double.infinity,
                 child: Container(
                   width: double.infinity,
+                  alignment: Alignment.bottomRight,
+                  color: Colors.white,
                   padding: const EdgeInsets.only(
                       left: 20, right: 20, top: 120, bottom: 0),
                   child: Text(inputText,
                       style: Ex1.titleStyle, textAlign: TextAlign.right),
                 )),
           ),
-          Text(lastResult.toString(),
-              style: Ex1.titleStyle, textAlign: TextAlign.right),
           const Divider(color: Colors.grey),
           for (var arr in btnArr)
             arr.length == 3
