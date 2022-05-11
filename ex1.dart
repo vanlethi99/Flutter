@@ -78,7 +78,7 @@ class _Ex1State extends State<Ex1> {
   ];
 
   void setTextInput(text, type) {
-    if (inputText.length > 30) {
+    if (inputText.length >= 30 && !(type == 'clear' || type == 'back')) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
